@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>reCAPTCHA認証</title>
+  <style>
+    /* モーダルウィンドウ用のスタイル */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba(0, 0, 0, 0.5);
+      z-index: 9999;
+    }
+    
+    .modal-content {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 5px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    }
+    button{
+        background-color: #fff;
+        padding: 3px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+        border-radius: 5px;
+        border: none;
+        margin: 5px;
+    }
+    button:active{
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3) inset;
+    }
+  </style>
+  <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+  <script>
+    // reCAPTCHAが正しく完了したかどうかのフラグ
+    var isRecaptchaValidated = false;
+
+    // reCAPTCHAのコールバック関数
+    function recaptchaCallback() {
+      isRecaptchaValidated = true;
+    }
+
+    // モーダルウィンドウを開く関数
+    function openModal() {
+      var modal = document.getElementById("modal");
+      modal.style.display = "block";
+    }
+
+    // モーダルウィンドウを閉じる関数
+    function closeModal() {
+      var modal = document.getElementById("modal");
+      modal.style.display = "none";
+    }
+
+    // reCAPTCHAの検証を実行する関数
+    function validateRecaptcha() {
+      if (isRecaptchaValidated) {
+        // reCAPTCHAが正しく完了している場合はモーダルウィンドウを閉じる処理を実行
+        closeModal();
+        window.open(location.search);
+        // ここに実際の処理を追加
+      } else {
+        // reCAPTCHAが未完了の場合はエラーメッセージを表示
+        alert("reCAPTCHAの検証が必要です。");
+      }
+    }
+  </script>
+</head>
+<body>
+  <!-- モーダルウィンドウ -->
+  <div id="modal" class="modal">
+    <div class="modal-content">
+      <!-- reCAPTCHA要素 -->
+      <div class="g-recaptcha" data-sitekey="6LdhlyUlAAAAAMahavg2Hw8lMtt7YZpwPGscyaUd" data-callback="recaptchaCallback"></div>
+      <button onclick="validateRecaptcha()">送信</button>
+      <button onclick="closeModal()">キャンセル</button>
+    </div>
+  </div>
+
+  <!-- モーダルウィンドウを開くボタン -->
+  <button onclick="openModal()">認証</button>
+</body>
+</html>
