@@ -63,14 +63,14 @@
     function validateRecaptcha() {
       if (isRecaptchaValidated) {
         // reCAPTCHAが正しく完了している場合はモーダルウィンドウを閉じる処理を実行
-        closeModal();
-        closeModal();
+        openModal();
         let par = location.search;
         if (par === ''){
           location.reload();
           openModal();
+        }else{
+          window.open(par);
         }
-        window.open();
         // ここに実際の処理を追加
       } else {
         // reCAPTCHAが未完了の場合はエラーメッセージを表示
