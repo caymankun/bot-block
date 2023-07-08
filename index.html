@@ -39,16 +39,6 @@
   </style>
   <script src="https://www.google.com/recaptcha/api.js" async defer></script>
   <script>
-    //openModal();
-
-    // reCAPTCHAが正しく完了したかどうかのフラグ
-    var isRecaptchaValidated = false;
-
-    // reCAPTCHAのコールバック関数
-    function recaptchaCallback() {
-      isRecaptchaValidated = true;
-    }
-
     // モーダルウィンドウを開く関数
     function openModal() {
       var modal = document.getElementById("modal");
@@ -61,28 +51,28 @@
       modal.style.display = "none";
     }
 
-    // reCAPTCHAの検証を実行する関数
-    function validateRecaptcha() {
-      if (isRecaptchaValidated) {
-        // reCAPTCHAが正しく完了している場合はモーダルウィンドウを閉じる処理を実行
-        closeModal();
-        
-        // reCAPTCHAの応答トークンをサーバーサイドに送信する
-        var recaptchaResponse = grecaptcha.getResponse();
-        var xhr = new XMLHttpRequest();
-        xhr.open("POST", "./botblock.php", true);
-        xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-        xhr.onreadystatechange = function() {
-          if (xhr.readyState === 4 && xhr.status === 200) {
-            // サーバーサイドのレスポンスを受け取った後の処理をここに記述
-            
-          }
-        };
-        xhr.send("recaptchaResponse=" + encodeURIComponent(recaptchaResponse));
-      } else {
-        // reCAPTCHAが未完了の場合はエラーメッセージを表示
-        alert("reCAPTCHAの検証が必要です。");
-      }
+    // フォームの送信処理
+    function submitForm() {
+      // reCAPTCHAの応答トークンを取得
+      var recaptchaResponse = grecaptcha.getResponse();
+
+      // フォームのデータを準備
+      var formData = new FormData();
+      formData.append('recaptchaResponse', recaptchaResponse);
+
+      // フォームをサーバーに送信（ここでは仮のURLを使用）
+      fetch('https://example.com/submit', {
+        method: 'POST',
+        body: formData
+      })
+      .then(function(response) {
+        // サーバーからの応答を処理
+        console.log(response);
+      })
+      .catch(function(error) {
+        // エラーハンドリング
+        console.error(error);
+      });
     }
   </script>
 </head>
@@ -91,11 +81,14 @@
   <div id="modal" class="modal">
     <div class="modal-content">
       <!-- reCAPTCHA要素 -->
-      <div class="g-recaptcha" data-sitekey="6LdhlyUlAAAAAMahavg2Hw8lMtt7YZpwPGscyaUd" data-callback="recaptchaCallback"></div>
-      <button onclick="validateRecaptcha()">送信</button>
+      <div class="g-recaptcha" data-sitekey="YOUR_SITE_KEY"></div>
+      <button onclick="submitForm()">送信</button>
       <button onclick="closeModal()">キャンセル</button>
     </div>
   </div>
-  <button onclick="openModal()">認証</button>
+
+  <!-- モーダルウィンドウを開くボタン -->
+  <button onclick="openModal()">モーダルウィンドウを開く</button>
 </body>
 </html>
+
