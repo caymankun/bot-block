@@ -65,7 +65,7 @@
         // reCAPTCHAが正しく完了している場合はモーダルウィンドウを閉じる処理を実行
         openModal();
         let par = location.search;
-        const RECA = sample.includes('https://');
+        const RECA = par.includes('https://');
         if (par === ''){
           location.reload();
         }else if(RECA = false){
