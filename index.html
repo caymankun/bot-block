@@ -78,7 +78,7 @@
             
           }
         };
-        xhr.send("recaptchaResponse=" + recaptchaResponse);
+        xhr.send("recaptchaResponse=" + encodeURIComponent(recaptchaResponse));
       } else {
         // reCAPTCHAが未完了の場合はエラーメッセージを表示
         alert("reCAPTCHAの検証が必要です。");
