@@ -75,7 +75,8 @@
         xhr.onreadystatechange = function() {
           if (xhr.readyState === 4 && xhr.status === 200) {
             // サーバーサイドのレスポンスを受け取った後の処理をここに記述
-            
+            let str = location.search;
+            window.open(str.replace('?caymankun=', ''))
           }
         };
         xhr.send("recaptchaResponse=" + encodeURIComponent(recaptchaResponse));
