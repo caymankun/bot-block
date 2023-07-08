@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>reCAPTCHA認証</title>
+  <title>認証</title>
   <style>
     /* モーダルウィンドウ用のスタイル */
     .modal {
@@ -39,6 +39,8 @@
   </style>
   <script src="https://www.google.com/recaptcha/api.js" async defer></script>
   <script>
+    //openModal();
+
     // reCAPTCHAが正しく完了したかどうかのフラグ
     var isRecaptchaValidated = false;
 
@@ -63,17 +65,20 @@
     function validateRecaptcha() {
       if (isRecaptchaValidated) {
         // reCAPTCHAが正しく完了している場合はモーダルウィンドウを閉じる処理を実行
-        openModal();
-        let par = location.search;
-        const ns = par.includes('https://');
-        if (par === ''){
-          location.reload();
-        }else if(ns = 'false'){
-          location.reload();
-        }else{
-          window.open(par);
-        }
-        // ここに実際の処理を追加
+        closeModal();
+        
+        // reCAPTCHAの応答トークンをサーバーサイドに送信する
+        var recaptchaResponse = grecaptcha.getResponse();
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "", true);
+        xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xhr.onreadystatechange = function() {
+          if (xhr.readyState === 4 && xhr.status === 200) {
+            // サーバーサイドのレスポンスを受け取った後の処理をここに記述
+            
+          }
+        };
+        xhr.send("recaptchaResponse=" + recaptchaResponse);
       } else {
         // reCAPTCHAが未完了の場合はエラーメッセージを表示
         alert("reCAPTCHAの検証が必要です。");
@@ -91,8 +96,6 @@
       <button onclick="closeModal()">キャンセル</button>
     </div>
   </div>
-
-  <!-- モーダルウィンドウを開くボタン -->
   <button onclick="openModal()">認証</button>
 </body>
 </html>
